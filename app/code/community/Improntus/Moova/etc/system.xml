@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <shipping>
+            <groups>
+                <moova_webservice translate="label">
+                    <label>Configuración de webservices moova</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <url translate="label">
+                            <label><![CDATA[<strong>API url</strong>]]></label>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>11</sort_order>
+                            <comment>La url ingresada debe terminar en "/"</comment>
+                        </url>
+                        <app_id translate="label">
+                            <label>Application ID:</label>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>35</sort_order>
+                            <comment>Email registrado en la cuenta.</comment>
+                        </app_id>
+                        <secret_key translate="label">
+                            <label>Secret key:</label>
+                            <frontend_type>password</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>40</sort_order>
+                        </secret_key>
+                        <dashboard_url>
+                            <label>Dashboard url</label>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>La url ingresada debe terminar en "/"</comment>
+                            <sort_order>40</sort_order>
+                        </dashboard_url>
+                        <direccion type="group" translate="label">
+                            <label>Dirección de despacho</label>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>200</sort_order>
+                            <fields>
+                                <calle translate="label">
+                                    <label>Calle</label>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>10</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </calle>
+                                <numero translate="label">
+                                    <label>Número</label>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>20</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </numero>
+                                <piso translate="label">
+                                    <label>Piso</label>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>21</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </piso>
+                                <departamento translate="label">
+                                    <label>Departamento</label>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>22</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </departamento>
+                                <codigo_postal translate="label">
+                                    <label>Código postal</label>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>23</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </codigo_postal>
+                                <ciudad translate="label">
+                                    <label>Ciudad</label>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>40</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </ciudad>
+                                <provincia translate="label">
+                                    <label>Provincia</label>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>50</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </provincia>
+                                <observaciones translate="label">
+                                    <label>Observaciones</label>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>60</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                </observaciones>
+                            </fields>
+                        </direccion>
+
+                        <moova_tracking type="group" translate="label">
+                            <label>Tracking Url y Estado de Envio</label>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>200</sort_order>
+                            <fields>
+                                <url translate="label">
+                                    <label>Url para trackeo</label>
+                                    <frontend_type>text</frontend_type>
+                                    <sort_order>10</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                    <comment>A esta url se le incluira el número de envio</comment>
+                                </url>
+                                <enable_status translate="label">
+                                    <label>Visualizar estado del envío</label>
+                                    <source_model>adminhtml/system_config_source_yesno</source_model>
+                                    <frontend_type>select</frontend_type>
+                                    <sort_order>20</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>0</show_in_store>
+                                </enable_status>
+                            </fields>
+                        </moova_tracking>
+                    </fields>
+                </moova_webservice>
+              </groups>
+        </shipping>
+		<carriers  translate="label" module="moova">
+            <tab>sales</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>330</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>          
+            <groups>
+                <moova translate="label">
+                    <label>Envios moova</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <model>moova/carrier_moova</model>
+                    <fields>                        
+                        <active translate="label">
+                            <label>Habilitado</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>10</sort_order>
+                        </active>
+                        <title translate="label">
+                            <label>Titulo</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>20</sort_order>
+                        </title>
+                        <description translate="label">
+                            <label>Descripción</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>25</sort_order>
+                        </description>
+                    </fields>
+                </moova>
+            </groups>
+		</carriers>
+    </sections>
+</config>

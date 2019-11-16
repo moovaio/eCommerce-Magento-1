@@ -1,0 +1,8 @@
+<config>
+  <modules>
+    <Improntus_Moova>
+      <active>true</active>
+      <codePool>community</codePool>
+    </Improntus_Moova>
+  </modules>
+</config>

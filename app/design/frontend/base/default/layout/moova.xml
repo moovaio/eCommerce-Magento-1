@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <checkout_onepage_index>
+        <reference name='checkout.onepage.billing'>
+            <block type='checkout/onepage_billing' name='form.additional.info' template='moova/checkout/onepage/campos_direccion_billing.phtml'/>
+        </reference>
+        <reference name='checkout.onepage.shipping'>
+            <block type='checkout/onepage_shipping' name='form.additional.info' template='moova/checkout/onepage/campos_direccion_shipping.phtml'/>
+        </reference>
+    </checkout_onepage_index>
+</layout>
