@@ -63,30 +63,33 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                         $_producto = $_item->getProduct();
 
                         $itemsWsMoova[] = [
+                            'quantity'  => $_item->getQtyOrdered(),
                             'description' => $_item->getName(),
                             'price'     => $_item->getPrice(),
                             'weight'    => ($_item->getQty() * $_item->getWeight()),
                             'length'    => (int) $_producto->getResource()
-                                    ->getAttributeRawValue($_producto->getId(),'alto',$_producto->getStoreId()) * $_item->getQty(),
+                                    ->getAttributeRawValue($_producto->getId(),'alto',$_producto->getStoreId()) * $_item->getQtyOrdered(),
                             'width'     => (int) $_producto->getResource()
-                                    ->getAttributeRawValue($_producto->getId(),'largo',$_producto->getStoreId()) * $_item->getQty(),
+                                    ->getAttributeRawValue($_producto->getId(),'largo',$_producto->getStoreId()) * $_item->getQtyOrdered(),
                             'height'    => (int) $_producto->getResource()
-                                    ->getAttributeRawValue($_producto->getId(),'ancho',$_producto->getStoreId()) * $_item->getQty()
+                                    ->getAttributeRawValue($_producto->getId(),'ancho',$_producto->getStoreId()) * $_item->getQtyOrdered()
                         ];
                     }
                 }
+
+                $countryIso3Code = Mage::getModel('directory/country')->load($order->getShippingAddress()->getCountryId())->getIso3Code();
 
                 $helper = Mage::helper('moova');
                 $direccionRetiro = $helper->getDireccionRetiro();
 
                 $shippingParams = [
-                    'currency'      => 'ARS',
+                    'currency'      => $order->getOrderCurrency()->getCode(),
                     'type'          => 'regular',
                     'flow'          => 'manual',
                     'from'          =>
                         [
                             'googlePlaceId' => '',
-                            'country'       => 'ARG',
+                            'country'       => $countryIso3Code,
                             'street' => $direccionRetiro['calle'],
                             'number' => $direccionRetiro['numero'],
                             'floor'  => $direccionRetiro['piso'],
@@ -114,7 +117,7 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                             'city'       => $address['city'],
                             'state'      => $address['region_id'] ? $helper->getProvincia($address['region_id']) : $address['region'],
                             'postalCode' => $address['postcode'],
-                            'country'       => 'ARG',
+                            'country'       => $countryIso3Code,
                             'instructions'  => $shippingAddress->getObservaciones(),
                             'contact'=> [
                                 'firstName' => $shippingAddress->getFirstname(),

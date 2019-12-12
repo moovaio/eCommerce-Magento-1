@@ -33,12 +33,6 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
         $pesoMaximo = (float)$helper->getPesoMaximo(self::CARRIER_CODE);
         $sku = '';
 
-        $dimensiones = [
-            'alto'  => 0,
-            'ancho' => 0,
-            'largo' => 0
-        ];
-
         $itemsWsMoova = [];
 
         foreach ($request->getAllItems() as $_item)
@@ -53,15 +47,6 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
                 {
                     $freeBoxes += $_item->getQty();
                 }
-
-                $dimensiones['alto'] += (int) $_producto->getResource()
-                        ->getAttributeRawValue($_producto->getId(),'alto',$_producto->getStoreId()) * $_item->getQty();
-
-                $dimensiones['largo'] += (int) $_producto->getResource()
-                        ->getAttributeRawValue($_producto->getId(),'largo',$_producto->getStoreId()) * $_item->getQty();
-
-                $dimensiones['ancho'] = (int) $_producto->getResource()
-                        ->getAttributeRawValue($_producto->getId(),'ancho',$_producto->getStoreId()) * $_item->getQty();
 
                 $itemsWsMoova[] = [
                     'description' => $_item->getName(),
@@ -129,6 +114,7 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
             }
 
             $direccionRetiro = $helper->getDireccionRetiro();
+            $countryIso3Code = Mage::getModel('directory/country')->load($order->getShippingAddress()->getCountryId())->getIso3Code();
 
             $costoEnvio = $webservice->getBudget(
                 [
@@ -140,7 +126,7 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
                         'city'      => $direccionRetiro['ciudad'],
                         'state'      => $direccionRetiro['provincia'],
                         'postalCode' => $direccionRetiro['codigo_postal'],
-                        'country' => 'ARG',
+                        'country' => $countryIso3Code,
                     ],
                     'to' => [
                         'street'   => trim(implode(' ',$address['street'])),
@@ -150,13 +136,13 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
                         'city'       => $address['city'],
                         'state'      => $address['region_id'] ? $helper->getProvincia($address['region_id']) : $address['region'],
                         'postalCode' => $address['postcode'],
-                        'country'    => 'ARS'
+                        'country'    => $countryIso3Code
                     ],
                     'conf'=>[
                         'assurance' => false,
                         'items'     => $itemsWsMoova
                     ],
-                    'shipping_type_id' => 1
+                    'type' => 'magento_1_24_horas_max'
                 ],1);
 
             if($costoEnvio)
@@ -167,7 +153,7 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
                 $rate->setCarrier($this->_code);
                 $rate->setCarrierTitle($this->getConfigData('title'));
                 $rate->setMethod($this->_code);
-                $rate->setMethodDescription($this->getConfigData('description'));
+                $rate->setMethodTitle($this->getConfigData('description'));
 
                 if($request->getFreeShipping() == true || $request->getPackageQty() == $this->getFreeBoxes())
                 {
