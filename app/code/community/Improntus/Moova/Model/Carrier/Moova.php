@@ -114,7 +114,7 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
             }
 
             $direccionRetiro = $helper->getDireccionRetiro();
-            $countryIso3Code = Mage::getModel('directory/country')->load($order->getShippingAddress()->getCountryId())->getIso3Code();
+            $countryIso3Code = Mage::getModel('directory/country')->load($shippingAddress->getCountryId())->getIso3Code();
 
             $costoEnvio = $webservice->getBudget(
                 [
