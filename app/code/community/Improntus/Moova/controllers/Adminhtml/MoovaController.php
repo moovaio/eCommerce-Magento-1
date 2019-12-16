@@ -66,7 +66,7 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                             'quantity'  => $_item->getQtyOrdered(),
                             'description' => $_item->getName(),
                             'price'     => $_item->getPrice(),
-                            'weight'    => ($_item->getQty() * $_item->getWeight()),
+                            'weight'    => ($_item->getQtyOrdered() * $_item->getWeight()),
                             'length'    => (int) $_producto->getResource()
                                     ->getAttributeRawValue($_producto->getId(),'alto',$_producto->getStoreId()) * $_item->getQtyOrdered(),
                             'width'     => (int) $_producto->getResource()
@@ -84,7 +84,7 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
 
                 $shippingParams = [
                     'currency'      => $order->getOrderCurrency()->getCode(),
-                    'type'          => 'regular',
+                    'type'          => 'magento_1_24_horas_max',
                     'flow'          => 'manual',
                     'from'          =>
                         [
@@ -133,9 +133,8 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                     'conf' =>
                         [
                             'assurance' => false,
-                            'items'     => $itemsWsMoova,
-                            'shipping_type_id' => 1
-                        ]
+                            'items'     => $itemsWsMoova
+                        ],
                 ];
 
                 /** @var Improntus_Moova_Model_Webservice $MoovaWs */

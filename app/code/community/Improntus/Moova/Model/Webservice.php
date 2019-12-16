@@ -82,7 +82,64 @@ class Improntus_Moova_Model_Webservice
 
         $response = curl_exec($curl);
 
-//        Mage::log(print_r($shippingParams,true), null, 'debug_moova_'.date('m_Y').'.log', true);
+        if(curl_error($curl))
+        {
+            $error = 'Se produjo un error al solicitar cotización: '. curl_error($curl);
+            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+            return false;
+        }
+
+        try{
+            $cotizacion = json_decode($response,true);
+
+            if(isset($cotizacion['status']))
+            {
+                if($cotizacion['code'] != 404)
+                {
+                    $error = 'Se produjo un error al solicitar cotización: '. $cotizacion['message'];
+                    Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+                }
+
+                return false;
+            }
+            else{
+                $this->_helper->setMoovaQuoteId($cotizacion['quote_id']);
+
+                return $cotizacion['price'];
+            }
+        }
+        catch (\Exception $e)
+        {
+            $error = 'Se produjo un error al solicitar cotización: '. $e->getMessage() . ' Response: '. print_r($response,true);
+            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+            return null;
+        }
+    }
+
+    /**
+     * @param $shippingParams
+     * @return bool|null
+     */
+    public function estimate($shippingParams)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl,
+            [
+                CURLOPT_URL => "{$this->_apiUrl}b2b/budgets/estimate?appId={$this->_appId}",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => json_encode($shippingParams),
+                CURLOPT_HTTPHEADER => [
+                    "Authorization: {$this->_secretKey}",
+                    "Content-Type: application/json"
+                ],
+            ]);
+
+        $response = curl_exec($curl);
 
         if(curl_error($curl))
         {

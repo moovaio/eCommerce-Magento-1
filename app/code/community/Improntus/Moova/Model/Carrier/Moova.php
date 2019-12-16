@@ -116,34 +116,62 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
             $direccionRetiro = $helper->getDireccionRetiro();
             $countryIso3Code = Mage::getModel('directory/country')->load($shippingAddress->getCountryId())->getIso3Code();
 
-            $costoEnvio = $webservice->getBudget(
-                [
-                    'from' => [
-                        'street' => $direccionRetiro['calle'],
-                        'number' => $direccionRetiro['numero'],
-                        'floor'  => $direccionRetiro['piso'],
-                        'apartment' => $direccionRetiro['departamento'],
-                        'city'      => $direccionRetiro['ciudad'],
-                        'state'      => $direccionRetiro['provincia'],
-                        'postalCode' => $direccionRetiro['codigo_postal'],
-                        'country' => $countryIso3Code,
-                    ],
-                    'to' => [
-                        'street'   => trim(implode(' ',$address['street'])),
-                        'number'   => $address['altura'],
-                        'floor'    => $address['piso'],
-                        'apartment'  => $address['departamento'],
-                        'city'       => $address['city'],
-                        'state'      => $address['region_id'] ? $helper->getProvincia($address['region_id']) : $address['region'],
-                        'postalCode' => $address['postcode'],
-                        'country'    => $countryIso3Code
-                    ],
-                    'conf'=>[
-                        'assurance' => false,
-                        'items'     => $itemsWsMoova
-                    ],
-                    'type' => 'magento_1_24_horas_max'
-                ],1);
+            if(!$address['altura'])
+            {
+                $costoEnvio = $webservice->estimate(
+                    [
+                        'from' => [
+                            'street' => $direccionRetiro['calle'],
+                            'number' => $direccionRetiro['numero'],
+                            'floor'  => $direccionRetiro['piso'],
+                            'apartment' => $direccionRetiro['departamento'],
+                            'city'      => $direccionRetiro['ciudad'],
+                            'state'      => $direccionRetiro['provincia'],
+                            'postalCode' => $direccionRetiro['codigo_postal'],
+                            'country' => $countryIso3Code,
+                        ],
+                        'to' => [
+                            'state'      => $address['region_id'] ? $helper->getProvincia($address['region_id']) : $address['region'],
+                            'postalCode' => $address['postcode'],
+                            'country'    => $countryIso3Code
+                        ],
+                        'conf'=>[
+                            'assurance' => false,
+                            'items'     => $itemsWsMoova
+                        ],
+                        'type' => 'magento_1_24_horas_max'
+                    ],1);
+            }
+            else{
+                $costoEnvio = $webservice->getBudget(
+                    [
+                        'from' => [
+                            'street' => $direccionRetiro['calle'],
+                            'number' => $direccionRetiro['numero'],
+                            'floor'  => $direccionRetiro['piso'],
+                            'apartment' => $direccionRetiro['departamento'],
+                            'city'      => $direccionRetiro['ciudad'],
+                            'state'      => $direccionRetiro['provincia'],
+                            'postalCode' => $direccionRetiro['codigo_postal'],
+                            'country' => $countryIso3Code,
+                        ],
+                        'to' => [
+                            'street'   => trim(implode(' ',$address['street'])),
+                            'number'   => $address['altura'],
+                            'floor'    => $address['piso'],
+                            'apartment'  => $address['departamento'],
+                            'city'       => $address['city'],
+                            'state'      => $address['region_id'] ? $helper->getProvincia($address['region_id']) : $address['region'],
+                            'postalCode' => $address['postcode'],
+                            'country'    => $countryIso3Code
+                        ],
+                        'conf'=>[
+                            'assurance' => false,
+                            'items'     => $itemsWsMoova
+                        ],
+                        'type' => 'magento_1_24_horas_max'
+                    ],1);
+            }
 
             if($costoEnvio)
             {
