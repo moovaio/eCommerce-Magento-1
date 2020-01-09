@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+   <name>Moova</name>
+   <version>1.0.4</version>
+   <stability>stable</stability>
+   <license uri="https://opensource.org/licenses/MIT">MIT License (MIT 3.0)</license>
+   <channel>community</channel>
+   <extends />
+   <summary>Moova.io</summary>
+   <description>Moova is a technology company that takes logistics, organizes it and transforms it into low cost and highly efficient solutions. We provide fast deliveries, warehouses, and customized fleets.</description>
+   <notes>==== 1.1.4 ====&#xD;
+Initial release</notes>
+   <compatible />
+   <dependencies>
+      <required>
+         <php>
+            <min>5.3.7</min>
+            <max>7.1.0</max>
+         </php>
+      </required>
+   </dependencies>
+</package>
