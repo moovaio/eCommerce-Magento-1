@@ -1,22 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <package>
-   <name>Moova</name>
-   <version>1.0.4</version>
-   <stability>stable</stability>
-   <license uri="https://opensource.org/licenses/MIT">MIT License (MIT 3.0)</license>
-   <channel>community</channel>
-   <extends />
-   <summary>Moova.io</summary>
-   <description>Moova is a technology company that takes logistics, organizes it and transforms it into low cost and highly efficient solutions. We provide fast deliveries, warehouses, and customized fleets.</description>
-   <notes>==== 1.1.4 ====&#xD;
-Initial release</notes>
-   <compatible />
-   <dependencies>
-      <required>
-         <php>
-            <min>5.3.7</min>
-            <max>7.1.0</max>
-         </php>
-      </required>
-   </dependencies>
+    <name>Moova</name>
+    <version>1.0.0</version>
+    <stability>stable</stability>
+    <license>MIT</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>Moova integration with Magento 1</summary>
+    <description>Moova integration with Magento 1</description>
+    <notes>Initial release</notes>
+    <authors><author><name>Moova</name><user>Moova</user><email>apps@moova.io</email></author></authors>
+    <date>2020-01-10</date>
+    <time>16:13:15</time>
+    <contents><target name="magelocal"><dir/></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.2.0</min><max>7.0.0</max></php><package><name/><channel>connect.magentocommerce.com/core</channel><min/><max/></package><package><name/><channel>connect.magentocommerce.com/core</channel><min/><max/></package><extension><name>Core</name><min/><max/></extension></required></dependencies>
 </package>
