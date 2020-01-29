@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <package>
     <name>Moova</name>
-    <version>1.0.0</version>
+    <version>1.0.01</version>
     <stability>stable</stability>
-    <license>MIT</license>
+    <license uri="https://opensource.org/licenses/MIT">MIT</license>
     <channel>community</channel>
     <extends/>
-    <summary>Moova integration with Magento 1</summary>
-    <description>Moova integration with Magento 1</description>
+    <summary>Moova integration</summary>
+    <description>Moova integration</description>
     <notes>Initial release</notes>
-    <authors><author><name>Moova</name><user>Moova</user><email>apps@moova.io</email></author></authors>
-    <date>2020-01-10</date>
-    <time>16:13:15</time>
-    <contents><target name="magelocal"><dir/></target></contents>
+    <authors><author><name>Moova</name><user>Moovaio</user><email>apps@moova.io</email></author><author><name>Axel</name><user>acandia</user><email>axel.candia@moova.io</email></author></authors>
+    <date>2020-01-11</date>
+    <time>13:58:51</time>
+    <contents><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="template"><dir name="sales"><dir name="order"><dir name="view"><dir name="tab"><file name="info.phtml" hash="2a7132e5976c34bab03a7fb8996fb910"/></dir></dir></dir></dir></dir></dir></dir></dir><dir name="frontend"><dir name="rwd"><dir name="default"><dir name="template"><dir name="checkout"><dir name="onepage"><file name="shipping.phtml" hash="0ce8393c48e2bd2503b004e0a29e04fe"/></dir></dir><dir name="customer"><dir name="address"><file name="edit.phtml" hash="9ec6de2e18779d3f83469b2c08a9ba22"/></dir></dir><dir name="persistent"><dir name="checkout"><dir name="onepage"><file name="billing.phtml" hash="7858d89efdda2092e7288bfc36310302"/></dir></dir></dir></dir></dir></dir><dir name="base"><dir name="default"><dir name="layout"><file name="moova.xml" hash="26776b76a1c87a32616108c982147ac8"/></dir><dir name="template"><dir name="customer"><dir name="address"><file name="edit.phtml" hash="79b653bb2839ff572f0ebe9bd234031b"/></dir></dir><dir name="moova"><dir name="checkout"><dir name="onepage"><file name="campos_direccion_billing.phtml" hash="fc39f63a73a5184a7880d6b72bad7a66"/><file name="campos_direccion_shipping.phtml" hash="051a6ce3a173b820c4923bfcc7617bc7"/></dir></dir></dir><dir name="shipping"><dir name="tracking"><file name="popup.phtml" hash="131eafbe3bb46b4ed6af3f6aff33a6b4"/></dir></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Improntus_Moova.xml" hash="9d1feab9e9f3582a07044a4a05f8eb6c"/></dir></target></contents>
     <compatible/>
-    <dependencies><required><php><min>5.2.0</min><max>7.0.0</max></php><package><name/><channel>connect.magentocommerce.com/core</channel><min/><max/></package><package><name/><channel>connect.magentocommerce.com/core</channel><min/><max/></package><extension><name>Core</name><min/><max/></extension></required></dependencies>
+    <dependencies><required><php><min>5.3.0</min><max>7.3.3</max></php></required></dependencies>
 </package>
