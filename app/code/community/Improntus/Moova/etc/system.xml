@@ -149,6 +149,156 @@
                                 </enable_status>
                             </fields>
                         </moova_tracking>
+                        <moova_match_address type="group" translate="label">
+                            <label>Mapea tu checkout</label>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>3</show_in_default>
+                            <show_in_website>3</show_in_website>
+                            <show_in_store>3</show_in_store>
+                            <sort_order>200</sort_order>
+                            <fields> 
+                                 <moova-map-fullstreet translate="label comment" module="moova">
+                                    <label>Full Address</label>
+                                    <comment>Recomendado: Street</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>1</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-fullstreet>
+                                
+                                <moova-map-street translate="label comment" module="moova">
+                                    <label>Calle</label>
+                                    <comment>Seleccionar si dividis calle y altura. Si no estas seguro dejar vacio</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>2</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-street>
+                                
+                                <moova-map-altura translate="label comment" module="moova">
+                                    <label>Altura</label>
+                                    <comment>Seleccionar si dividis calle y altura. Si no estas seguro dejar vacio</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>3</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-altura>
+
+                                <moova-map-piso translate="label comment" module="moova">
+                                    <label>Piso</label>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>4</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-piso>
+
+                                <moova-map-departamento translate="label comment" module="moova">
+                                    <label>Departamento</label>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>5</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-departamento>
+
+                                <moova-map-city  translate="label comment" module="moova">
+                                    <label>Ciudad</label>
+                                    <comment>Obligatorio. Valor Recomendado: city</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>6</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-city>
+
+                                <moova-map-region translate="label comment" module="moova">
+                                    <label>Estado/Provincia</label>
+                                    <comment>Obligatorio. Valor Recomendado: region</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>7</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-region>
+
+                                <moova-map-postcode translate="label comment" module="moova">
+                                    <label>Codigo Postal</label>
+                                    <comment>Obligatorio. Valor Recomendado: postcode</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>8</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-postcode>
+
+                                <moova-map-country translate="label comment" module="moova">
+                                    <label>Pais</label>
+                                    <comment>Obligatorio. Valor Recomendado: <moova-map-country>country_id</moova-map-country>country_id</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>9</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-country>
+
+                                <moova-map-name translate="label comment" module="moova">
+                                    <label>Nombre</label>
+                                    <comment>Obligatorio. Valor Recomendado: firstname</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>10</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-name>
+
+                                <moova-map-lastname translate="label comment"  module="moova">
+                                    <label>Apellido</label> 
+                                    <comment>Obligatorio. Valor Recomendado: lastname</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>11</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-lastname>
+
+                                <moova-map-email translate="label comment"  module="moova">
+                                    <label>Email</label>
+                                    <comment>Obligatorio. Valor Recomendado: email</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>12</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-email>
+
+                                <moova-map-phone translate="label comment"  module="moova">
+                                    <label>Telefono</label>
+                                    <comment>Valor Recomendado: telephone</comment>
+                                    <frontend_type>select</frontend_type>
+                                    <source_model>moova/pmethod</source_model>
+                                    <sort_order>13</sort_order>
+                                    <show_in_default>1</show_in_default>
+                                    <show_in_website>1</show_in_website>
+                                    <show_in_store>1</show_in_store>
+                                </moova-map-phone>
+                            </fields>
+                        </moova_match_address>
                     </fields>
                 </moova_webservice>
               </groups>

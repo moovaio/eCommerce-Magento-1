@@ -155,7 +155,19 @@
 			<moova_webservice>
 				<url>https://api-dev.moova.io/</url><!-- https://api-dev.moova.io/ -->
 				<dashboard_url>https://dashboard.moova.io/</dashboard_url><!-- https://dev.moova.io/ -->
+				 
 			</moova_webservice>
+			<moova_match_address>
+				<moova-map-fullstreet>street</moova-map-fullstreet>
+				<moova-map-city>city</moova-map-city>
+				<moova-map-region>region</moova-map-region>
+				<moova-map-postcode>postcode</moova-map-postcode>
+				<moova-map-country>country_id</moova-map-country>
+				<moova-map-name>firstname</moova-map-name>
+				<moova-map-surname>lastname</moova-map-surname>
+				<moova-map-email>email</moova-map-surname>
+				<moova-map-phone>telephone</moova-map-phone>
+			</moova_match_address>
 			<moova_tracking>
 				<url>https://dashboard.moova.io/external?id=</url>
 				<enable_status>1</enable_status>
