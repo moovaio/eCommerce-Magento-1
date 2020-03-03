@@ -64,8 +64,8 @@ class Improntus_Moova_Model_Webservice
     public function getBudget($shippingParams)
     {
         $curl = curl_init();
-
-        curl_setopt_array($curl,
+        curl_setopt_array(
+            $curl,
             [
                 CURLOPT_URL => "{$this->_apiUrl}b2b/v2/budgets?appId={$this->_appId}",
                 CURLOPT_RETURNTRANSFER => true,
@@ -78,40 +78,35 @@ class Improntus_Moova_Model_Webservice
                     "Authorization: {$this->_secretKey}",
                     "Content-Type: application/json"
                 ],
-            ]);
+            ]
+        );
 
         $response = curl_exec($curl);
 
-        if(curl_error($curl))
-        {
-            $error = 'Se produjo un error al solicitar cotización: '. curl_error($curl);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        if (curl_error($curl)) {
+            $error = 'Se produjo un error al solicitar cotización: ' . curl_error($curl);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
             return false;
         }
 
-        try{
-            $cotizacion = json_decode($response,true);
+        try {
+            $cotizacion = json_decode($response, true);
 
-            if(isset($cotizacion['status']))
-            {
-                if($cotizacion['code'] != 404)
-                {
-                    $error = 'Se produjo un error al solicitar cotización: '. $cotizacion['message'];
-                    Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+            if (isset($cotizacion['status'])) {
+                if ($cotizacion['code'] != 404) {
+                    $error = 'Se produjo un error al solicitar cotización: ' . $cotizacion['message'];
+                    Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
                 }
 
                 return false;
-            }
-            else{
+            } else {
                 $this->_helper->setMoovaQuoteId($cotizacion['quote_id']);
 
                 return $cotizacion['price'];
             }
-        }
-        catch (\Exception $e)
-        {
-            $error = 'Se produjo un error al solicitar cotización: '. $e->getMessage() . ' Response: '. print_r($response,true);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        } catch (\Exception $e) {
+            $error = 'Se produjo un error al solicitar cotización: ' . $e->getMessage() . ' Response: ' . print_r($response, true);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
             return null;
         }
     }
@@ -124,7 +119,8 @@ class Improntus_Moova_Model_Webservice
     {
         $curl = curl_init();
 
-        curl_setopt_array($curl,
+        curl_setopt_array(
+            $curl,
             [
                 CURLOPT_URL => "{$this->_apiUrl}b2b/budgets/estimate?appId={$this->_appId}",
                 CURLOPT_RETURNTRANSFER => true,
@@ -137,40 +133,35 @@ class Improntus_Moova_Model_Webservice
                     "Authorization: {$this->_secretKey}",
                     "Content-Type: application/json"
                 ],
-            ]);
+            ]
+        );
 
         $response = curl_exec($curl);
 
-        if(curl_error($curl))
-        {
-            $error = 'Se produjo un error al solicitar cotización: '. curl_error($curl);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        if (curl_error($curl)) {
+            $error = 'Se produjo un error al solicitar cotización: ' . curl_error($curl);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
             return false;
         }
 
-        try{
-            $cotizacion = json_decode($response,true);
+        try {
+            $cotizacion = json_decode($response, true);
 
-            if(isset($cotizacion['status']))
-            {
-                if($cotizacion['code'] != 404)
-                {
-                    $error = 'Se produjo un error al solicitar cotización: '. $cotizacion['message'];
-                    Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+            if (isset($cotizacion['status'])) {
+                if ($cotizacion['code'] != 404) {
+                    $error = 'Se produjo un error al solicitar cotización: ' . $cotizacion['message'];
+                    Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
                 }
 
                 return false;
-            }
-            else{
+            } else {
                 $this->_helper->setMoovaQuoteId($cotizacion['quote_id']);
 
                 return $cotizacion['price'];
             }
-        }
-        catch (\Exception $e)
-        {
-            $error = 'Se produjo un error al solicitar cotización: '. $e->getMessage() . ' Response: '. print_r($response,true);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        } catch (\Exception $e) {
+            $error = 'Se produjo un error al solicitar cotización: ' . $e->getMessage() . ' Response: ' . print_r($response, true);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
             return null;
         }
     }
@@ -183,7 +174,8 @@ class Improntus_Moova_Model_Webservice
     {
         $curl = curl_init();
 
-        curl_setopt_array($curl,
+        curl_setopt_array(
+            $curl,
             [
                 CURLOPT_URL => "{$this->_apiUrl}b2b/shippings?appId={$this->_appId}",
                 CURLOPT_RETURNTRANSFER => true,
@@ -196,33 +188,30 @@ class Improntus_Moova_Model_Webservice
                     "Authorization: {$this->_secretKey}",
                     "Content-Type: application/json"
                 ],
-            ]);
+            ]
+        );
 
         $response = curl_exec($curl);
 
-        if(curl_error($curl))
-        {
-            $error = 'Se produjo un error al solicitar cotización: '. curl_error($curl);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        if (curl_error($curl)) {
+            $error = 'Se produjo un error al solicitar cotización: ' . curl_error($curl);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
             return false;
         }
 
-        try{
-            $shipment = json_decode($response,true);
+        try {
+            $shipment = json_decode($response, true);
 
-            if(!isset($shipment['id']) && isset($shipment['errors']))
-            {
-                $error = 'Se produjo un error al solicitar cotización. Response: '. print_r($response,true);
-                Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+            if (!isset($shipment['id']) && isset($shipment['errors'])) {
+                $error = 'Se produjo un error al solicitar cotización. Response: ' . print_r($response, true);
+                Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
                 return false;
             }
 
             return $shipment;
-        }
-        catch (\Exception $e)
-        {
-            $error = 'Se produjo un error al solicitar cotización: '. $e->getMessage() . ' Response: '. print_r($response,true);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        } catch (\Exception $e) {
+            $error = 'Se produjo un error al solicitar cotización: ' . $e->getMessage() . ' Response: ' . print_r($response, true);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
             return false;
         }
     }
@@ -235,7 +224,8 @@ class Improntus_Moova_Model_Webservice
     {
         $curl = curl_init();
 
-        curl_setopt_array($curl,
+        curl_setopt_array(
+            $curl,
             [
                 CURLOPT_URL => "{$this->_apiUrl}b2b/shippings/$shipmentIdMoova/label?appId={$this->_appId}",
                 CURLOPT_RETURNTRANSFER => true,
@@ -247,26 +237,24 @@ class Improntus_Moova_Model_Webservice
                     "Authorization: {$this->_secretKey}",
                     "Content-Type: application/json"
                 ],
-            ]);
+            ]
+        );
 
         $response = curl_exec($curl);
 
-        if(curl_error($curl))
-        {
-            $error = 'Se produjo un error al solicitar cotización: '. curl_error($curl);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        if (curl_error($curl)) {
+            $error = 'Se produjo un error al solicitar cotización: ' . curl_error($curl);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
             return false;
         }
 
-        try{
+        try {
             $shipment = \Zend_Json::decode($response);
 
             return $shipment;
-        }
-        catch (\Exception $e)
-        {
-            $error = 'Se produjo un error al solicitar cotización: '. $e->getMessage() . ' Response: '. print_r($response,true);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        } catch (\Exception $e) {
+            $error = 'Se produjo un error al solicitar cotización: ' . $e->getMessage() . ' Response: ' . print_r($response, true);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
             return false;
         }
     }
@@ -284,8 +272,7 @@ class Improntus_Moova_Model_Webservice
         $shipmentId = null;
         parse_str($query, $queries);
 
-        if(isset($queries['id']))
-        {
+        if (isset($queries['id'])) {
             $shipmentId = $queries['id'];
         }
 
@@ -300,7 +287,8 @@ class Improntus_Moova_Model_Webservice
     {
         $curl = curl_init();
 
-        curl_setopt_array($curl,
+        curl_setopt_array(
+            $curl,
             [
                 CURLOPT_URL => "{$this->_apiUrl}b2b/shippings/$shipmentId?appId={$this->_appId}",
                 CURLOPT_RETURNTRANSFER => true,
@@ -312,27 +300,25 @@ class Improntus_Moova_Model_Webservice
                     "Authorization: {$this->_secretKey}",
                     "Content-Type: application/json"
                 ],
-            ]);
+            ]
+        );
 
         $response = curl_exec($curl);
 
-        if(curl_error($curl))
-        {
-            $error = 'Se produjo un error al solicitar cotización: '. curl_error($curl);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        if (curl_error($curl)) {
+            $error = 'Se produjo un error al solicitar cotización: ' . curl_error($curl);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
 
             return false;
         }
 
-        try{
+        try {
             $shipment = \Zend_Json::decode($response);
 
             return $shipment;
-        }
-        catch (\Exception $e)
-        {
-            $error = 'Se produjo un error al solicitar cotización: '. $e->getMessage() . ' Response: '. print_r($response,true);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        } catch (\Exception $e) {
+            $error = 'Se produjo un error al solicitar cotización: ' . $e->getMessage() . ' Response: ' . print_r($response, true);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
 
             return false;
         }
@@ -347,7 +333,8 @@ class Improntus_Moova_Model_Webservice
     {
         $curl = curl_init();
 
-        curl_setopt_array($curl,
+        curl_setopt_array(
+            $curl,
             [
                 CURLOPT_URL => "{$this->_apiUrl}b2b/shippings/$shipmentId/$status?appId={$this->_appId}",
                 CURLOPT_RETURNTRANSFER => true,
@@ -359,33 +346,30 @@ class Improntus_Moova_Model_Webservice
                     "Authorization: {$this->_secretKey}",
                     "Content-Type: application/json"
                 ],
-            ]);
+            ]
+        );
 
         $response = curl_exec($curl);
 
         $response_json = json_decode($response);
 
-        if(curl_error($curl) || strtolower($response_json->status) == 'error')
-        {
-            $error = 'Se produjo un error al intentar enviar el estatus: '. curl_error($curl);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        if (curl_error($curl) || strtolower($response_json->status) == 'error') {
+            $error = 'Se produjo un error al intentar enviar el estatus: ' . curl_error($curl);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
 
             return false;
         }
 
-        try{
-            if(strtolower($response_json->status) == 'ready')
+        try {
+            if (strtolower($response_json->status) == 'ready')
                 return true;
             else
                 return false;
-        }
-        catch (\Exception $e)
-        {
-            $error = 'Se produjo un error al intentar enviar el status: '. $e->getMessage() . ' Response: '. print_r($response,true);
-            Mage::log($error, null, 'error_moova_'.date('m_Y').'.log', true);
+        } catch (\Exception $e) {
+            $error = 'Se produjo un error al intentar enviar el status: ' . $e->getMessage() . ' Response: ' . print_r($response, true);
+            Mage::log($error, null, 'error_moova_' . date('m_Y') . '.log', true);
 
             return false;
         }
     }
-
 }

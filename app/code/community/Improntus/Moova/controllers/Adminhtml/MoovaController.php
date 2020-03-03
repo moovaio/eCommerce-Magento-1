@@ -16,48 +16,44 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
         /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order')->load($orderId);
 
-        if (!$order->getId())
-        {
+        if (!$order->getId()) {
             Mage::throwException("Order does not exist, for the Shipment process to complete");
         }
 
-        if ($order->canShip())
-        {
-            try
-            {
+        if ($order->canShip()) {
+            try {
                 $shipment = Mage::getModel('sales/service_order', $order)
                     ->prepareShipment($this->_getItemQtys($order));
 
                 $shippingAddress = $order->getShippingAddress();
 
                 $address = [];
-                $address['firstname'] = $shippingAddress->getFirstname();
-                $address['lastname'] = $shippingAddress->getLastname();
-                $address['mail'] = $shippingAddress->getEmail();
-                $address['telephone'] = $shippingAddress->getTelephone();
-                $address['street'] = [];
-
-                foreach ($shippingAddress->getStreet() as $_street)
-                {
-                    $address['street'][] = $_street;
+                $address['firstname'] = $this->getOptionalField($shippingAddress, 'moova-map-name');
+                $address['lastname'] = $this->getOptionalField($shippingAddress, 'moova-map-lastname');
+                $address['mail'] = $this->getOptionalField($shippingAddress, 'moova-map-email');
+                $address['telephone'] = $this->getOptionalField($shippingAddress, 'moova-map-phone');
+                $streetKey = Mage::getStoreConfig("shipping/moova_match_address/moova-map-fullstreet");
+                if ($streetKey) {
+                    $addressFields = $this->getAddress($shippingAddress[$streetKey]);
+                    $address['street'] = $addressFields['street'];
+                    $address['altura'] = $addressFields['number'];
+                } else {
+                    $address['street'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-fullstreet")];
+                    $address['altura'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-altura")];
                 }
 
-                $address['altura'] = $shippingAddress->getAltura();
-                $address['city'] = $shippingAddress->getCity();
-                $address['region_id'] = $shippingAddress->getRegionId();
-                $address['region'] = $shippingAddress->getRegion();
-                $address['piso'] = $shippingAddress->getPiso();
-                $address['departamento'] = $shippingAddress->getDepartamento();
-                $address['postcode'] = $shippingAddress->getPostcode();
+                $address['city'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-city")];
+                $address['region'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-region")];
+                $address['piso'] = $this->getOptionalField($shippingAddress, 'moova-map-piso');
+                $address['departamento'] = $this->getOptionalField($shippingAddress, 'moova-map-departamento');
+                $address['postcode'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-postcode")];
 
                 $sku = '';
 
                 $itemsWsMoova = [];
 
-                foreach ($order->getAllItems() as $_item)
-                {
-                    if($sku != $_item->getSku())
-                    {
+                foreach ($order->getAllItems() as $_item) {
+                    if ($sku != $_item->getSku()) {
                         $sku = $_item->getSku();
 
                         $_producto = $_item->getProduct();
@@ -68,16 +64,16 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                             'price'     => $_item->getPrice(),
                             'weight'    => ($_item->getQtyOrdered() * $_item->getWeight()),
                             'length'    => (int) $_producto->getResource()
-                                    ->getAttributeRawValue($_producto->getId(),'alto',$_producto->getStoreId()) * $_item->getQtyOrdered(),
+                                ->getAttributeRawValue($_producto->getId(), 'alto', $_producto->getStoreId()) * $_item->getQtyOrdered(),
                             'width'     => (int) $_producto->getResource()
-                                    ->getAttributeRawValue($_producto->getId(),'largo',$_producto->getStoreId()) * $_item->getQtyOrdered(),
+                                ->getAttributeRawValue($_producto->getId(), 'largo', $_producto->getStoreId()) * $_item->getQtyOrdered(),
                             'height'    => (int) $_producto->getResource()
-                                    ->getAttributeRawValue($_producto->getId(),'ancho',$_producto->getStoreId()) * $_item->getQtyOrdered()
+                                ->getAttributeRawValue($_producto->getId(), 'ancho', $_producto->getStoreId()) * $_item->getQtyOrdered()
                         ];
                     }
                 }
 
-                $countryIso3Code = Mage::getModel('directory/country')->load($order->getShippingAddress()->getCountryId())->getIso3Code();
+                $countryIso3Code = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-country")];
 
                 $helper = Mage::helper('moova');
                 $direccionRetiro = $helper->getDireccionRetiro();
@@ -87,66 +83,65 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                     'type'          => 'magento_1_24_horas_max',
                     'flow'          => 'manual',
                     'from'          =>
+                    [
+                        'googlePlaceId' => '',
+                        'country'       => $countryIso3Code,
+                        'street' => $direccionRetiro['calle'],
+                        'number' => $direccionRetiro['numero'],
+                        'floor'  => $direccionRetiro['piso'],
+                        'apartment' => $direccionRetiro['departamento'],
+                        'city'      => $direccionRetiro['ciudad'],
+                        'state'      => $direccionRetiro['provincia'],
+                        'postalCode' => $direccionRetiro['codigo_postal'],
+                        'instructions'  => '',
+                        'contact'       =>
                         [
-                            'googlePlaceId' => '',
-                            'country'       => $countryIso3Code,
-                            'street' => $direccionRetiro['calle'],
-                            'number' => $direccionRetiro['numero'],
-                            'floor'  => $direccionRetiro['piso'],
-                            'apartment' => $direccionRetiro['departamento'],
-                            'city'      => $direccionRetiro['ciudad'],
-                            'state'      => $direccionRetiro['provincia'],
-                            'postalCode' => $direccionRetiro['codigo_postal'],
-                            'instructions'  => '',
-                            'contact'       =>
-                                [
-                                    'firstName' => '',
-                                    'lastName'  => '',
-                                    'email'     => '',
-                                    'phone'     => ''
-                                ],
-                            'message'=> ''
+                            'firstName' => '',
+                            'lastName'  => '',
+                            'email'     => '',
+                            'phone'     => ''
                         ],
-                    'to'=>
-                        [
-                            'googlePlaceId' => '',
-                            'street'   => trim(implode(' ',$address['street'])),
-                            'number'   => $address['altura'],
-                            'floor'    => $address['piso'],
-                            'apartment'  => $address['departamento'],
-                            'city'       => $address['city'],
-                            'state'      => $address['region_id'] ? $helper->getProvincia($address['region_id']) : $address['region'],
-                            'postalCode' => $address['postcode'],
-                            'country'       => $countryIso3Code,
-                            'instructions'  => $shippingAddress->getObservaciones(),
-                            'contact'=> [
-                                'firstName' => $shippingAddress->getFirstname(),
-                                'lastName'  => $shippingAddress->getLastname(),
-                                'email'     => $shippingAddress->getEmail(),
-                                'phone'     => $shippingAddress->getTelephone()
-                            ],
-                            'message'       => ''
+                        'message' => ''
+                    ],
+                    'to' =>
+                    [
+                        'googlePlaceId' => '',
+                        'street'   => trim(implode(' ', $address['street'])),
+                        'number'   => $address['altura'],
+                        'floor'    => $address['piso'],
+                        'apartment'  => $address['departamento'],
+                        'city'       => $address['city'],
+                        'state'      => $address['region'],
+                        'postalCode' => $address['postcode'],
+                        'country'       => $countryIso3Code,
+                        'instructions'  => $shippingAddress->getObservaciones(),
+                        'contact' => [
+                            'firstName' => $shippingAddress->getFirstname(),
+                            'lastName'  => $shippingAddress->getLastname(),
+                            'email'     => $shippingAddress->getEmail(),
+                            'phone'     => $shippingAddress->getTelephone()
                         ],
+                        'message'       => ''
+                    ],
                     'internalCode'  => '',
                     'comments'      => '',
                     'extra'         => [],
                     'conf' =>
-                        [
-                            'assurance' => false,
-                            'items'     => $itemsWsMoova
-                        ],
+                    [
+                        'assurance' => false,
+                        'items'     => $itemsWsMoova
+                    ],
                 ];
 
                 /** @var Improntus_Moova_Model_Webservice $MoovaWs */
                 $MoovaWs = Mage::getModel('moova/webservice');
                 $shipmentMoova = $MoovaWs->newShipment($shippingParams);
 
-                if($shipmentMoova === false)
-                {
+                if ($shipmentMoova === false) {
                     return false;
                 }
 
-                $shipmentId = substr($shipmentMoova['id'],0,8);
+                $shipmentId = substr($shipmentMoova['id'], 0, 8);
 
                 $arrTracking = array(
                     'carrier_code' => isset($carrier_code) ? $carrier_code : $order->getShippingCarrier()->getCarrierCode(),
@@ -164,16 +159,12 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                 $order->save();
 
                 Mage::getSingleton("core/session")->addSuccess('La solicitud de envío MOOVA fue realizada exitosamente.');
-            }
-            catch (Exception $e)
-            {
-                Mage::getSingleton("core/session")->addError('Se produjo un error al intentar generar el envío MOOVA. Error: '.$e->getMessage());
+            } catch (Exception $e) {
+                Mage::getSingleton("core/session")->addError('Se produjo un error al intentar generar el envío MOOVA. Error: ' . $e->getMessage());
 
                 throw $e;
             }
-        }
-        else
-        {
+        } else {
             Mage::getSingleton("core/session")->addNotice('El pedido no puede ser generado en MOOVA');
         }
 
@@ -185,19 +176,16 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
         $request = $this->getRequest();
         $moovaId = $request->getParam('moova_id');
 
-        try
-        {
+        try {
             $shipment = Mage::getModel('moova/webservice')->getShipmentLabel($moovaId);
 
-            if($shipment !== false && $shipment['status'] != 'error')
-            {
+            if ($shipment !== false && $shipment['status'] != 'error') {
                 $url = $shipment['label'];
                 $mediapath = Mage::getBaseDir('media') . '/moova/';
                 $file = $mediapath . basename($url);
 
-                if (!file_exists($mediapath) || !is_dir($mediapath))
-                {
-                    mkdir("{$mediapath}", 0775,true);
+                if (!file_exists($mediapath) || !is_dir($mediapath)) {
+                    mkdir("{$mediapath}", 0775, true);
                 }
 
                 $fp = fopen($file, 'w');
@@ -212,7 +200,7 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
 
                 header('Content-Description: File Transfer');
                 header('Content-Type: application/octet-stream');
-                header('Content-Disposition: attachment; filename='.basename($file));
+                header('Content-Disposition: attachment; filename=' . basename($file));
                 header('Content-Transfer-Encoding: binary');
                 header('Expires: 0');
                 header('Cache-Control: must-revalidate');
@@ -224,17 +212,13 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                 return;
             }
 
-            if(isset($shipment['status']) && $shipment['status'] == 'error')
-            {
-                Mage::getSingleton("core/session")->addError(__('Se produjo un error al generar el envío MOOVA. Por favor intentelo nuevamente. '. $shipment['message']));
-            }
-            else{
+            if (isset($shipment['status']) && $shipment['status'] == 'error') {
+                Mage::getSingleton("core/session")->addError(__('Se produjo un error al generar el envío MOOVA. Por favor intentelo nuevamente. ' . $shipment['message']));
+            } else {
                 Mage::getSingleton("core/session")->addError(__('Se produjo un error al generar el envío MOOVA. Por favor intentelo nuevamente'));
             }
-        }
-        catch (Exception $e)
-        {
-            Mage::getSingleton("core/session")->addError('Se produjo un error al intentar generar el envío MOOVA. Error: '.$e->getMessage());
+        } catch (Exception $e) {
+            Mage::getSingleton("core/session")->addError('Se produjo un error al intentar generar el envío MOOVA. Error: ' . $e->getMessage());
         }
 
         $this->_redirectReferer();
@@ -246,17 +230,14 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
         $moovaId = $request->getParam('moova_id');
         $status  = $request->getParam('status');
 
-        try
-        {
+        try {
             $shipment = Mage::getModel('moova/webservice')->sendStatusShipment($moovaId, $status);
 
-            if($shipment === true)
-                Mage::getSingleton("core/session")->addSuccess(__('Se envio con exito el estado '.$status.' al envio MOOVA con id '.$moovaId));
+            if ($shipment === true)
+                Mage::getSingleton("core/session")->addSuccess(__('Se envio con exito el estado ' . $status . ' al envio MOOVA con id ' . $moovaId));
             else
                 Mage::getSingleton("core/session")->addError(__('Se produjo un error, por favor revice la dirección en el panel de Moova, puede referirse a múltiples lugares.'));
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             Mage::getSingleton("core/session")->addError(__('Se produjo un error: ') . $e->getMessage());
         }
 
@@ -282,8 +263,7 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
         $ship_data = $shipment->getOrder()->getData();
         $customerEmail = $ship_data['customer_email'];
 
-        if (!is_null($customerEmail) && !$emailSentStatus)
-        {
+        if (!is_null($customerEmail) && !$emailSentStatus) {
             $shipment->sendEmail(true, $customerEmailComments);
             $shipment->setEmailSent(true);
         }
@@ -299,14 +279,10 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
     {
         $qty = array();
 
-        foreach ($order->getAllItems() as $_eachItem)
-        {
-            if ($_eachItem->getParentItemId())
-            {
+        foreach ($order->getAllItems() as $_eachItem) {
+            if ($_eachItem->getParentItemId()) {
                 $qty[$_eachItem->getParentItemId()] = $_eachItem->getQtyOrdered();
-            }
-            else
-            {
+            } else {
                 $qty[$_eachItem->getId()] = $_eachItem->getQtyOrdered();
             }
         }
