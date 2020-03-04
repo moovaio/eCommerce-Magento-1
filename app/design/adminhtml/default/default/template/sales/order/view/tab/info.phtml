@@ -59,7 +59,7 @@
                 <?php  if ($_order->getTracksCollection()->count()) : ?>
 
                     <?php if($_order->getShippingMethod() == 'moova_moova' && Mage::getStoreConfig('shipping/moova_tracking/enable_status')): ?>
-                        <?php $moovaId = isset($_order->getTracksCollection()->getFirstItem()['track_number']) ? $_order->getTracksCollection()->getFirstItem()['track_number'] : null?>
+                        <?php $moovaId = $_order->getTracksCollection()->toArray()['items'][0]['track_number'] ?>
                         <?php $trackingInfo =  $shipment = Mage::getModel('moova/webservice')->trackShipment($moovaId); ?>
                         <?php $moovaInfo = isset($trackingInfo['status']) ? Improntus_Moova_Helper_ShipmentStatus::getShipmentMessage($trackingInfo['status']) : ''; ?>
 

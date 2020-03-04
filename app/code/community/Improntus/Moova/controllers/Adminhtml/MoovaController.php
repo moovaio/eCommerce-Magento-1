@@ -106,8 +106,8 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                     'to' =>
                     [
                         'googlePlaceId' => '',
-                        'street'   => trim(implode(' ', $address['street'])),
-                        'number'   => $address['altura'],
+                        'street' => $address['street'],
+                        'number' => $address['altura'],
                         'floor'    => $address['piso'],
                         'apartment'  => $address['departamento'],
                         'city'       => $address['city'],
@@ -148,7 +148,6 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                     'title' => isset($shipmentCarrierTitle) ? $shipmentCarrierTitle : $order->getShippingCarrier()->getConfigData('title'),
                     'number' => $shipmentId,
                 );
-
                 $track = Mage::getModel('sales/order_shipment_track')->addData($arrTracking);
                 $shipment->addTrack($track);
 
@@ -269,6 +268,29 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
         }
 
         return $this;
+    }
+
+    private function getOptionalField($shipping, $param)
+    {
+        $field = Mage::getStoreConfig("shipping/moova_match_address/$param");
+        if ($field) {
+            return isset($shipping[$field]) ? $shipping[$field] : null;
+        }
+        return null;
+    }
+
+    public static function getAddress($fullStreet)
+    {
+        //Now let's work on the first line
+        preg_match('/(^\d*[\D]*)(\d+)(.*)/i', $fullStreet, $res);
+        $line1 = $res;
+
+        if ((isset($line1[1]) && !empty($line1[1]) && $line1[1] !== " ") && !empty($line1)) {
+            //everything's fine. Go ahead 
+            $street_name = trim($line1[1]);
+            $street_number = trim($line1[2]);
+        }
+        return array('street' => $street_name, 'number' => $street_number);
     }
 
     /**
