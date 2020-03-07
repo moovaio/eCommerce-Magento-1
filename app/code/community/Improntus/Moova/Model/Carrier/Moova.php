@@ -30,17 +30,20 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
         $pesoTotal = 0;
         $freeBoxes = 0;
 
-        $pesoMaximo = (float) $helper->getPesoMaximo(self::CARRIER_CODE);
+        $pesoMaximo = (float)$helper->getPesoMaximo(self::CARRIER_CODE);
         $sku = '';
 
         $itemsWsMoova = [];
-        foreach ($request->getAllItems() as $_item) {
-            if ($sku != $_item->getSku()) {
+        foreach ($request->getAllItems() as $_item)
+        {
+            if($sku != $_item->getSku())	
+            {
                 $sku = $_item->getSku();
                 $pesoTotal = ($_item->getQty() * $_item->getWeight()) + $pesoTotal;
                 $_producto = $_item->getProduct();
 
-                if ($_item->getFreeShippingDiscount() && !$_item->getProduct()->isVirtual()) {
+                if ($_item->getFreeShippingDiscount() && !$_item->getProduct()->isVirtual())
+                {
                     $freeBoxes += $_item->getQty();
                 }
 
@@ -72,12 +75,13 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
         }
 
 
-        $address =  Mage::app()->getRequest()->getParam('shipping') ?
-            Mage::app()->getRequest()->getParam('shipping') : Mage::app()->getRequest()->getParam('billing');
+        $address =  Mage::app()->getRequest()->getParam('billing') ?  Mage::app()->getRequest()->getParam('billing') :	
+                Mage::app()->getRequest()->getParam('shipping');
 
         $quote = Mage::getSingleton('checkout/session')->getQuote();
+        
+        $shippingAddress = $quote->getShippingAddress();
 
-        $shippingAddress = $quote->getShippingAddress()->getData();
         if (!$address) {
             $address = [];
             $address['firstname'] = $this->getOptionalField($shippingAddress, 'moova-map-name');
@@ -85,6 +89,7 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
             $address['mail'] = $this->getOptionalField($shippingAddress, 'moova-map-email');
             $address['telephone'] = $this->getOptionalField($shippingAddress, 'moova-map-phone');
             $streetKey = Mage::getStoreConfig("shipping/moova_match_address/moova-map-fullstreet");
+            
             if ($streetKey) {
                 $addressFields = $this->getAddress($shippingAddress[$streetKey]);
                 $address['street'] = $addressFields['street'];
@@ -94,6 +99,7 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
                 $address['altura'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-altura")];
             }
 
+            $address['street'] = is_array($address['street']) ? implode (' ',$address['street']) : $address['street'];
             $address['city'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-city")];
             $address['region'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-region")];
         }
@@ -164,7 +170,7 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
             );
         }
 
-        if ($costoEnvio) {
+        if ($costoEnvio!==null) {
             /* @var $rate Mage_Shipping_Model_Rate_Result_Method */
             $rate = Mage::getModel('shipping/rate_result_method');
 

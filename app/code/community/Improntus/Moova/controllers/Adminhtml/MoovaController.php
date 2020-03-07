@@ -41,7 +41,7 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                     $address['street'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-fullstreet")];
                     $address['altura'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-altura")];
                 }
-
+                $address['street'] = is_array($address['street']) ? implode (' ',$address['street']) : $address['street'];
                 $address['city'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-city")];
                 $address['region'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-region")];
                 $address['piso'] = $this->getOptionalField($shippingAddress, 'moova-map-piso');

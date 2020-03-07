@@ -164,7 +164,7 @@
 				<moova-map-postcode>postcode</moova-map-postcode>
 				<moova-map-country>country_id</moova-map-country>
 				<moova-map-name>firstname</moova-map-name>
-				<moova-map-surname>lastname</moova-map-surname>
+				<moova-map-lastname>lastname</moova-map-lastname>
 				<moova-map-email>email</moova-map-email>
 				<moova-map-phone>telephone</moova-map-phone>
 			</moova_match_address>
