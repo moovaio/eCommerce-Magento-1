@@ -32,6 +32,7 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                 $address['lastname'] = $this->getOptionalField($shippingAddress, 'moova-map-lastname');
                 $address['mail'] = $this->getOptionalField($shippingAddress, 'moova-map-email');
                 $address['telephone'] = $this->getOptionalField($shippingAddress, 'moova-map-phone');
+                $address['instructions'] = $this->getOptionalField($shippingAddress,'moova-map-instructions');
                 $streetKey = Mage::getStoreConfig("shipping/moova_match_address/moova-map-fullstreet");
                 if ($streetKey) {
                     $addressFields = $this->getAddress($shippingAddress[$streetKey]);
@@ -93,7 +94,7 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                         'city'      => $direccionRetiro['ciudad'],
                         'state'      => $direccionRetiro['provincia'],
                         'postalCode' => $direccionRetiro['codigo_postal'],
-                        'instructions'  => '',
+                        'instructions'  => isset($direccionRetiro['observaciones']) ? $direccionRetiro['observaciones'] : '',
                         'contact'       =>
                         [
                             'firstName' => '',
@@ -114,16 +115,16 @@ class Improntus_Moova_Adminhtml_MoovaController extends Mage_Adminhtml_Controlle
                         'state'      => $address['region'],
                         'postalCode' => $address['postcode'],
                         'country'       => $countryIso3Code,
-                        'instructions'  => $shippingAddress->getObservaciones(),
+                        'instructions'  =>  $address['instructions'],
                         'contact' => [
-                            'firstName' => $shippingAddress->getFirstname(),
-                            'lastName'  => $shippingAddress->getLastname(),
-                            'email'     => $shippingAddress->getEmail(),
-                            'phone'     => $shippingAddress->getTelephone()
+                            'firstName' => $address['firstname'],
+                            'lastName'  => $address['lastname'],
+                            'email'     => $address['mail'],
+                            'phone'     => $address['telephone']
                         ],
                         'message'       => ''
                     ],
-                    'internalCode'  => '',
+                    'internalCode'  => strval($order->getRealOrderId()),
                     'comments'      => '',
                     'extra'         => [],
                     'conf' =>

@@ -81,29 +81,19 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
         $quote = Mage::getSingleton('checkout/session')->getQuote();
         
         $shippingAddress = $quote->getShippingAddress();
+        $streetKey = Mage::getStoreConfig("shipping/moova_match_address/moova-map-fullstreet");
+        $address['city'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-city")];
+        $address['region'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-region")];
+        if ($streetKey) {
+            $addressFields = $this->getAddress($shippingAddress[$streetKey]); 
+            $address['street'] = $addressFields['street'];
+            $address['altura'] = $addressFields['number'];
+        } else {
+            $address['street'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-fullstreet")];
+            $address['altura'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-altura")];
+        } 
 
-        if (!$address) {
-            $address = [];
-            $address['firstname'] = $this->getOptionalField($shippingAddress, 'moova-map-name');
-            $address['lastname'] = $this->getOptionalField($shippingAddress, 'moova-map-lastname');
-            $address['mail'] = $this->getOptionalField($shippingAddress, 'moova-map-email');
-            $address['telephone'] = $this->getOptionalField($shippingAddress, 'moova-map-phone');
-            $streetKey = Mage::getStoreConfig("shipping/moova_match_address/moova-map-fullstreet");
-            
-            if ($streetKey) {
-                $addressFields = $this->getAddress($shippingAddress[$streetKey]);
-                $address['street'] = $addressFields['street'];
-                $address['altura'] = $addressFields['number'];
-            } else {
-                $address['street'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-fullstreet")];
-                $address['altura'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-altura")];
-            }
-
-            $address['street'] = is_array($address['street']) ? implode (' ',$address['street']) : $address['street'];
-            $address['city'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-city")];
-            $address['region'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-region")];
-        }
-
+        $address['street'] = is_array($address['street']) ? implode (' ',$address['street']) : $address['street'];
         $address['piso'] = $this->getOptionalField($shippingAddress, 'moova-map-piso');
         $address['departamento'] = $this->getOptionalField($shippingAddress, 'moova-map-departamento');
         $address['postcode'] = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-postcode")];
@@ -111,6 +101,7 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
         $direccionRetiro = $helper->getDireccionRetiro();
         $countryIso3Code = $shippingAddress[Mage::getStoreConfig("shipping/moova_match_address/moova-map-country")];
         $isAltura = array_key_exists('altura', $address) && $address['altura'];
+        
         if (!$isAltura) {
             $costoEnvio = $webservice->estimate(
                 [
@@ -158,7 +149,7 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
                         'city'       => $address['city'],
                         'state'      => $address['region'],
                         'postalCode' => $address['postcode'],
-                        'country'    => $countryIso3Code
+                        'country'    => $countryIso3Code,
                     ],
                     'conf' => [
                         'assurance' => false,
@@ -169,7 +160,7 @@ class Improntus_Moova_Model_Carrier_Moova extends Mage_Shipping_Model_Carrier_Ab
                 1
             );
         }
-
+        
         if ($costoEnvio!==null) {
             /* @var $rate Mage_Shipping_Model_Rate_Result_Method */
             $rate = Mage::getModel('shipping/rate_result_method');

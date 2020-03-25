@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>Moova</name>
-    <version>1.0.01</version>
+    <version>1.0.02</version>
     <stability>stable</stability>
     <license uri="https://opensource.org/licenses/MIT">MIT</license>
     <channel>community</channel>
