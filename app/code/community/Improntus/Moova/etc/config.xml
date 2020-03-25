@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Improntus_Moova>
-			<version>1.0.2</version>
+			<version>1.0.5</version>
 		</Improntus_Moova>
 	</modules>
 	<global>
